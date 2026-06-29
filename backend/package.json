@@ -1,0 +1,42 @@
+{
+  "name": "spandan-backend",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/main.js",
+    "lint": "eslint \"src/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "migrate": "node-pg-migrate -f migrations"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.12.0",
+    "ioredis": "^5.4.1",
+    "bullmq": "^5.8.0",
+    "zod": "^3.23.8",
+    "jsonwebtoken": "^9.0.2",
+    "helmet": "^7.1.0",
+    "cors": "^2.8.5",
+    "express-rate-limit": "^7.3.1",
+    "pino": "^9.2.0",
+    "pino-http": "^10.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.3",
+    "tsx": "^4.16.2",
+    "vitest": "^2.0.2",
+    "@types/express": "^4.17.21",
+    "@types/pg": "^8.11.6",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/cors": "^2.8.17",
+    "@types/node": "^20.14.10",
+    "eslint": "^9.6.0",
+    "prettier": "^3.3.2",
+    "node-pg-migrate": "^7.5.2",
+    "pino-pretty": "^11.2.1"
+  }
+}
