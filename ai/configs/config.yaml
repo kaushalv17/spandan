@@ -1,0 +1,15 @@
+defaults:
+  - model: yolov8
+  - data: spandan
+  - train: default
+  - _self_
+
+seed: 42
+
+output:
+  dir: runs
+  run_name: spandan_yolov8
+
+tracking:
+  mlflow: false
+  experiment: spandan

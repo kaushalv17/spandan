@@ -1,0 +1,5 @@
+arch: yolov8n.pt
+epochs: 100
+imgsz: 640
+batch: 16
+device: cpu

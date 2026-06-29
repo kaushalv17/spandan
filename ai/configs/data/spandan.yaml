@@ -1,0 +1,10 @@
+yaml: data/processed/spandan.yaml
+classes:
+  - longitudinal_crack
+  - transverse_crack
+  - alligator_crack
+  - pothole
+  - spallation
+  - exposed_rebar
+  - efflorescence
+  - corrosion_stain
