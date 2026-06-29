@@ -8,7 +8,6 @@ module never pulls in torch/ultralytics.
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import cast
 
 from .base import Detector
 
@@ -36,10 +35,14 @@ def get_detector(name: str = DEFAULT_MODEL, **kwargs: object) -> Detector:
     return _REGISTRY[name](**kwargs)
 
 
-def _yolo_factory(**kwargs: object) -> Detector:
+def _yolo_factory(
+    weights: str | None = None,
+    device: str | None = None,
+    conf: float = 0.25,
+) -> Detector:
     from .yolo import YOLOv8Detector
 
-    return cast(Detector, YOLOv8Detector(**kwargs))
+    return YOLOv8Detector(weights=weights, device=device, conf=conf)
 
 
 _REGISTRY[DEFAULT_MODEL] = _yolo_factory

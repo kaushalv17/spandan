@@ -10,14 +10,14 @@ no third-party dependencies, so it is fully unit-testable in the slim install.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 
 # Base coefficient (locked). Calibrated so realistic small-extent defects
 # accumulate gradually while catastrophic full-extent defects drive SHI to 0.
 K: float = 0.55
 
 
-class Severity(str, Enum):
+class Severity(StrEnum):
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
@@ -48,7 +48,7 @@ CRITICAL_THRESHOLD: float = 55.0
 FAILURE_THRESHOLD: float = 25.0
 
 
-class HealthBand(str, Enum):
+class HealthBand(StrEnum):
     HEALTHY = "Healthy"
     DEGRADING = "Degrading"
     CRITICAL = "Critical"

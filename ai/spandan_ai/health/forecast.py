@@ -21,7 +21,7 @@ def linear_fit(xs: list[float], ys: list[float]) -> tuple[float, float]:
     sxx = sum((x - mean_x) ** 2 for x in xs)
     if sxx == 0:
         raise ValueError("all x values are identical; cannot fit a trend")
-    sxy = sum((x - mean_x) * (y - mean_y) for x, y in zip(xs, ys))
+    sxy = sum((x - mean_x) * (y - mean_y) for x, y in zip(xs, ys, strict=True))
     slope = sxy / sxx
     intercept = mean_y - slope * mean_x
     return slope, intercept
