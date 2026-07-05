@@ -29,8 +29,18 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: "20" }
       - run: cd backend && npm ci && npm run lint && npm run typecheck && npm test
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: cd frontend && npm ci && npm run typecheck && npm test
   docker:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # docker compose resolves `env_file: .env` for every service at build time,
+      # so provide one from the committed template before building.
+      - run: cp .env.example .env
       - run: docker compose build

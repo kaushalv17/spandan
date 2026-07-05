@@ -1,0 +1,19 @@
+{
+  "name": "Spandan — National Asset Intelligence Grid",
+  "short_name": "Spandan",
+  "description": "Citizens as sensors for public-asset health. Report roads and bridges; get AI condition scores, risk priority, and maintenance forecasts.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f8fafc",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
