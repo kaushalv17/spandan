@@ -11,5 +11,6 @@ ENV NODE_ENV=production
 COPY package*.json ./
 RUN npm ci --omit=dev
 COPY --from=build /app/dist ./dist
+COPY migrations ./migrations
 EXPOSE 8080
 CMD ["node", "dist/main.js"]

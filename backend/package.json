@@ -10,7 +10,10 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "migrate": "node-pg-migrate -f migrations"
+    "worker": "tsx watch src/worker.ts",
+    "start:worker": "node dist/worker.js",
+    "migrate": "tsx src/infrastructure/migrate.ts",
+    "migrate:prod": "node dist/infrastructure/migrate.js"
   },
   "dependencies": {
     "express": "^4.19.2",
@@ -36,7 +39,6 @@
     "@types/node": "^20.14.10",
     "eslint": "^9.6.0",
     "prettier": "^3.3.2",
-    "node-pg-migrate": "^7.5.2",
     "pino-pretty": "^11.2.1"
   }
 }
