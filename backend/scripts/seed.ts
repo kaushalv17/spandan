@@ -1,7 +1,7 @@
-/* Phase 6 seed: authority user + demo assets + observations backed by images
-   uploaded to MinIO (worker fetches from localhost -> no external 404s).
-   Run against a LIVE API + MinIO:
-     $env:API_BASE="http://localhost:8080/api/v1"; npm run seed */
+/* Phase 7 seed: authority user + 4 assets mapped to graded demo images so the
+   dashboard shows one asset in each SHI band (healthy/degrading/critical/failure).
+   Images are uploaded to MinIO so the worker fetches locally (no external 404s).
+   Run:  $env:API_BASE="http://localhost:8080/api/v1"; npm run seed */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import pg from "pg";
@@ -76,11 +76,12 @@ async function uploadDemoImage(fileName: string): Promise<string> {
   return `${S3_PUBLIC_URL.replace(/\/$/, "")}/${key}`;
 }
 
+// Each asset uses a distinct graded image so the board shows all four bands.
 const ASSETS = [
-  { name: "NH-48 Flyover Deck",   assetType: "bridge", location: { lng: 77.1000, lat: 28.5562 }, importance: 5, img: "bridge_spall.jpg" },
-  { name: "Ring Road Segment 12", assetType: "road",   location: { lng: 77.2090, lat: 28.6139 }, importance: 4, img: "road_pothole.jpg" },
-  { name: "Yamuna Rail Bridge",   assetType: "bridge", location: { lng: 77.2400, lat: 28.6500 }, importance: 5, img: "road_crack.jpg" },
-  { name: "Outer Ring Rd KM-34",  assetType: "road",   location: { lng: 77.1800, lat: 28.5000 }, importance: 3, img: "road_pothole.jpg" },
+  { name: "NH-48 Flyover Deck",   assetType: "bridge", location: { lng: 77.1000, lat: 28.5562 }, importance: 5, img: "asset_failure.jpg" },    // 🔴
+  { name: "Yamuna Rail Bridge",   assetType: "bridge", location: { lng: 77.2400, lat: 28.6500 }, importance: 5, img: "asset_critical.jpg" },   // 🟠
+  { name: "Ring Road Segment 12", assetType: "road",   location: { lng: 77.2090, lat: 28.6139 }, importance: 4, img: "asset_degrading.jpg" },  // 🟡
+  { name: "Outer Ring Rd KM-34",  assetType: "road",   location: { lng: 77.1800, lat: 28.5000 }, importance: 3, img: "asset_healthy.jpg" },    // 🟢
 ];
 
 async function main() {
@@ -122,7 +123,6 @@ async function main() {
     console.log("seed: asset", asset.id, a.name);
   }
 
-  // Upload demo images to MinIO, then submit observations pointing at them.
   for (const { a } of created) {
     const imageUrl = await uploadDemoImage(a.img);
     await call(
@@ -130,13 +130,14 @@ async function main() {
       { method: "POST", body: JSON.stringify({ imageUrl, location: a.location }) },
       token,
     );
-    console.log("seed: observation ->", a.name);
+    console.log("seed: observation ->", a.name, `(${a.img})`);
   }
 
   console.log("\nSEED DONE. Demo login:");
   console.log("  email:   ", email);
   console.log("  password:", password);
-  console.log("Give the worker ~10-20s, then refresh the dashboard for SHI/risk.");
+  console.log("Expected board: NH-48 🔴  Yamuna 🟠  Ring Road 🟡  Outer Ring 🟢");
+  console.log("Give the worker ~10-20s, then refresh the dashboard.");
 }
 
 main().catch((e) => {
