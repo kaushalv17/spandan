@@ -27,9 +27,25 @@ _detector: Detector | None = None
 
 
 def _detector_instance() -> Detector:
+    """Return the active detector.
+
+    Tries the configured model first (real YOLOv8 weights when present). If that
+    fails to load - e.g. no trained weights yet - it falls back to the
+    classical-CV DemoDetector so /infer never 500s and the SHI pipeline still
+    runs fully offline. Drop real weights at weights/yolov8_spandan.pt and the
+    service uses them automatically on next start.
+    """
     global _detector
     if _detector is None:
-        _detector = get_detector(get_settings().model_name or DEFAULT_MODEL)
+        settings = get_settings()
+        try:
+            _detector = get_detector(settings.model_name or DEFAULT_MODEL)
+            log.info("detector_loaded", model=settings.model_name)
+        except Exception as exc:  # noqa: BLE001
+            log.warning("detector_fallback_demo", error=str(exc))
+            from ..models.demo import DemoDetector
+
+            _detector = DemoDetector()
     return _detector
 
 
