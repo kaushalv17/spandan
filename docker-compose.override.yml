@@ -1,0 +1,22 @@
+services:
+  # BullMQ inference worker (runs the Phase 2 /infer pipeline over the queue)
+  worker:
+    build: ./backend
+    command: node dist/worker.js
+    env_file: .env
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+      ai: { condition: service_started }
+
+  # one-shot: create the bucket + allow anonymous download
+  minio-init:
+    image: minio/mc
+    depends_on: [minio]
+    entrypoint: >
+      /bin/sh -c "
+      until mc alias set local http://minio:9000 spandan spandanminio; do sleep 2; done &&
+      mc mb -p local/spandan-observations || true &&
+      mc anonymous set download local/spandan-observations &&
+      echo 'minio-init: bucket ready'
+      "

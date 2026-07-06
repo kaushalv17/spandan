@@ -9,6 +9,7 @@ import { healthcheck as dbHealthcheck } from "./infrastructure/db.js";
 import { logger } from "./infrastructure/logger.js";
 import { errorHandler, notFound } from "./http/middleware/errorHandler.js";
 import { apiRouter } from "./http/routes/index.js";
+import { ensureBucket } from "./infrastructure/storage.js";
 
 export function createApp() {
   const app = express();
@@ -47,5 +48,6 @@ export function createApp() {
 
 if (process.env.NODE_ENV !== "test") {
   const app = createApp();
+  await ensureBucket().catch((e) => logger.warn({ e }, "bucket bootstrap skipped"));
   app.listen(env.PORT, () => logger.info(`spandan-backend on :${env.PORT}`));
 }
